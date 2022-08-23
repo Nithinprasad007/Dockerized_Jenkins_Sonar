@@ -1,0 +1,41 @@
+version: "3"
+services:
+  postgreserv:
+    image: postgres:12.12
+    volumes:
+      - postgreVol:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=my-secret-pw
+      - POSTGRES_DB=sonarDB
+  sonarserv:
+    image: sonarqube:lts
+    ports:
+      - 9000:9000
+    environment:
+      - sonar.jdbc.username=postgresuser
+      - sonar.jdbc.password=my-secret-pw
+      - sonar.jdbc.url=jdbc:postgresql://postgreserv/sonarDB
+    volumes:
+      - sonarConfVol:/opt/sonarqube/conf
+      - sonarDataVol:/opt/sonarqube/data
+      - sonarExtVol:/opt/sonarqube/extensions
+      - sonarPluginsVol:/opt/sonarqube/lib/bundled-plugins
+    depends_on:
+      - postgreserv
+  jenkinsserv:
+    image: jenkins/jenkins:jdk11
+    volumes:
+      - jenkins-root:/var/jenkins_home
+    ports:
+      - 8080:8080
+      - 50000:50000
+volumes:
+  jenkins-root:
+  postgreVol:
+  sonarConfVol:
+  sonarDataVol:
+  sonarExtVol:
+  sonarPluginsVol:

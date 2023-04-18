@@ -19,7 +19,7 @@ pipeline{
             steps{
                 script{
                 withSonarQubeEnv('sonarQube') {
-            sh 'mvn clean verify sonar:sonar -Dsonar.projectName=sonarIntegratedProject -Dsonar.projectKey=sonarIntegratedProject'
+            sh 'mvn clean verify sonar:sonar -Dsonar.projectName=sonarIntegratedSCMProject -Dsonar.projectKey=sonarIntegratedSCMProject'
                 }
         }
             }

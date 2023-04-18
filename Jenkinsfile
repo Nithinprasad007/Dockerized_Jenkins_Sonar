@@ -25,7 +25,11 @@ pipeline{
             }
             
         }
-
+     stage ("Archive the Artifact"){
+            steps{
+                archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
+            }
+        }
      stage ("test") {
         steps {
             sh 'mvn verify'

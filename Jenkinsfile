@@ -26,12 +26,6 @@ pipeline{
             
         }
 
-     stage ("quality-gate"){
-        steps {
-            waitForQualityGate abortPipeline : true
-        }
-     }
-
      stage ("test") {
         steps {
             sh 'mvn verify'

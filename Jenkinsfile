@@ -4,24 +4,27 @@ pipeline{
    agent any
 
    tools {
-     maven 'Maven-3.8.6'
+     maven 'mvn'
    }
 
    stages {
 
      stage ("build") {
         steps {
-           sh 'mvn clean package'
+           sh 'mvn clean install'
         }
      }
 
-     stage ("sonar-analysis") {
-        steps {
-            withSonarQubeEnv('Sonar_Server'){
-                sh 'mvn sonar:sonar'
-            }
+        stage ("sonar"){
+            steps{
+                script{
+                withSonarQubeEnv('sonarQube') {
+            sh 'mvn clean verify sonar:sonar -Dsonar.projectName=sonarIntegratedProject -Dsonar.projectKey=sonarIntegratedProject'
+                }
         }
-     }
+            }
+            
+        }
 
      stage ("quality-gate"){
         steps {
